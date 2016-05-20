@@ -29,5 +29,10 @@ RUN git clone https://github.com/puppetlabs/mcollective-puppetca-agent.git \
 # Patch to use ssh-agent (https://github.com/puppetlabs/marionette-collective/pull/372)
 RUN patch -p1 < /patches/00-ssh-agent.patch
 
+# Allows to set Stomp host using an environment variable
+RUN patch -p1 < /patches/02-stomp_host.patch
+
+COPY ./client.cfg /root/.mcollective
+
 ENTRYPOINT [ "mco" ]
 CMD [ "--help" ]

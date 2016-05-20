@@ -27,7 +27,6 @@ RUN git clone https://github.com/puppetlabs/mcollective-puppetca-agent.git \
   && rm -rf mcollective-puppetca-agent
 
 # Patch to use ssh-agent (https://github.com/puppetlabs/marionette-collective/pull/372)
-# FIXME: I couldn't make it work in the context of Docker
 RUN patch -p1 < /patches/00-ssh-agent.patch
 
 ENTRYPOINT [ "mco" ]

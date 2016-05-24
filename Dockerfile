@@ -28,6 +28,14 @@ RUN git clone https://github.com/puppetlabs/mcollective-puppetca-agent.git \
   && cp mcollective-puppetca-agent/agent/puppetca.rb lib/mcollective/agent/ \
   && rm -rf mcollective-puppetca-agent
 
+# Install puppet plugin
+RUN git clone https://github.com/puppetlabs/mcollective-puppet-agent.git \
+  && cp mcollective-puppet-agent/agent/puppet.ddl lib/mcollective/agent/ \
+  && cp mcollective-puppet-agent/agent/puppet.rb lib/mcollective/agent/ \
+  && cp mcollective-puppet-agent/application/puppet.rb lib/mcollective/application/ \
+  && cp -a mcollective-puppet-agent/util/ lib/mcollective/ \
+  && rm -rf mcollective-puppet-agent
+
 # Install package plugin
 RUN git clone https://github.com/puppetlabs/mcollective-package-agent.git \
   && cp mcollective-package-agent/agent/package.ddl lib/mcollective/agent/ \

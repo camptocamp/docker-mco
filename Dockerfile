@@ -14,27 +14,16 @@ COPY ./patches/ /patches
 
 RUN mkdir lib/mcollective/util/
 
-# Install package plugin
-RUN git clone https://github.com/puppetlabs/mcollective-package-agent.git \
-  && cp mcollective-package-agent/agent/package.ddl lib/mcollective/agent/ \
-  && cp mcollective-package-agent/agent/package.rb lib/mcollective/agent/ \
-  && cp mcollective-package-agent/application/package.rb lib/mcollective/application/ \
-  && cp -a mcollective-package-agent/util/package/ lib/mcollective/util/ \
-  && rm -rf mcollective-package-agent
-
-# Install puppet plugin
-RUN git clone https://github.com/puppetlabs/mcollective-puppet-agent.git \
-  && cp mcollective-puppet-agent/agent/puppet.ddl lib/mcollective/agent/ \
-  && cp mcollective-puppet-agent/agent/puppet.rb lib/mcollective/agent/ \
-  && cp mcollective-puppet-agent/application/puppet.rb lib/mcollective/application/ \
-  && cp -a mcollective-puppet-agent/util/ lib/mcollective/ \
-  && rm -rf mcollective-puppet-agent
-
-# Install puppetca plugin
-RUN git clone https://github.com/puppetlabs/mcollective-puppetca-agent.git \
-  && cp mcollective-puppetca-agent/agent/puppetca.ddl lib/mcollective/agent/ \
-  && cp mcollective-puppetca-agent/agent/puppetca.rb lib/mcollective/agent/ \
-  && rm -rf mcollective-puppetca-agent
+# Install Puppetlabs's plugins
+RUN for plugin in package puppet puppetca service; do \
+    git clone https://github.com/puppetlabs/mcollective-$plugin-agent.git ; \
+    test -d mcollective-$plugin-agent/agent/ && cp -a mcollective-$plugin-agent/agent/ lib/mcollective/ ; \
+    test -d mcollective-$plugin-agent/application/ && cp -a mcollective-$plugin-agent/application/ lib/mcollective/ ; \
+    test -d mcollective-$plugin-agent/data/ && cp -a mcollective-$plugin-agent/data/ lib/mcollective/ ; \
+    test -d mcollective-$plugin-agent/util/ && cp -a mcollective-$plugin-agent/util/ lib/mcollective/ ; \
+    test -d mcollective-$plugin-agent/validator/ && cp -a mcollective-$plugin-agent/validator/ lib/mcollective/ ; \
+    rm -rf mcollective-$plugin-agent ; \
+  done
 
 # Install r10k plugin
 RUN git clone https://github.com/acidprime/r10k.git \
@@ -43,14 +32,6 @@ RUN git clone https://github.com/acidprime/r10k.git \
   && cp r10k/templates/agent/r10k.rb.erb lib/mcollective/agent/r10k.rb \
   && patch -p1 < /patches/01-r10k-agent.patch \
   && rm -rf r10k
-
-# Install service plugin
-RUN git clone https://github.com/puppetlabs/mcollective-service-agent.git \
-  && cp mcollective-service-agent/agent/service.ddl lib/mcollective/agent/ \
-  && cp mcollective-service-agent/agent/service.rb lib/mcollective/agent/ \
-  && cp mcollective-service-agent/application/service.rb lib/mcollective/application/ \
-  && cp -a mcollective-service-agent/util/ lib/mcollective/ \
-  && rm -rf mcollective-service-agent
 
 # Patch to use ssh-agent (https://github.com/puppetlabs/marionette-collective/pull/372)
 RUN patch -p1 < /patches/00-ssh-agent.patch

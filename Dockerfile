@@ -15,7 +15,7 @@ COPY ./patches/ /patches
 RUN mkdir lib/mcollective/util/
 
 # Install Puppetlabs's plugins
-RUN for plugin in filemgr package puppet puppetca service; do \
+RUN for plugin in filemgr package puppet puppetca puppetnode service; do \
     git clone https://github.com/puppetlabs/mcollective-$plugin-agent.git ; \
     test -d mcollective-$plugin-agent/agent/ && cp -a mcollective-$plugin-agent/agent/ lib/mcollective/ ; \
     test -d mcollective-$plugin-agent/application/ && cp -a mcollective-$plugin-agent/application/ lib/mcollective/ ; \

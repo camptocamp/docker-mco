@@ -1,7 +1,7 @@
 FROM ruby:alpine
 
 ENV STOMP_VERSION 1.3.5
-ENV MCO_VERSION 2.8.4
+ENV MCO_VERSION 2.9.1
 
 RUN gem install stomp --version $STOMP_VERSION --no-ri --no-rdoc \
   && gem install net-ssh --no-ri --no-rdoc \

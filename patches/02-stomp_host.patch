@@ -1,11 +1,13 @@
 --- a/lib/mcollective/connector/activemq.rb
 +++ b/lib/mcollective/connector/activemq.rb
-@@ -228,7 +228,7 @@ module MCollective
+@@ -244,8 +244,8 @@
            1.upto(pools) do |poolnum|
              host = {}
- 
+
 -            host[:host] = get_option("activemq.pool.#{poolnum}.host")
+-            host[:port] = get_option("activemq.pool.#{poolnum}.port", 61613).to_i
 +            host[:host] = get_env_or_option("STOMP_HOST", "activemq.pool.#{poolnum}.host")
-             host[:port] = get_option("activemq.pool.#{poolnum}.port", 61613).to_i
-             host[:login] = get_env_or_option("STOMP_USER", "activemq.pool.#{poolnum}.user", '')
-             host[:passcode] = get_env_or_option("STOMP_PASSWORD", "activemq.pool.#{poolnum}.password", '')
++            host[:port] = get_env_or_option("STOMP_PORT", "activemq.pool.#{poolnum}.port", 61613).to_i
+             host[:ssl] = get_bool_option("activemq.pool.#{poolnum}.ssl", "false")
+             
+             # read user from config file
